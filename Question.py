@@ -1,6 +1,3 @@
-
-
-url = "https://opentdb.com/api.php?amount=1"
 import json
 import requests
 import random
@@ -131,23 +128,4 @@ class Question(object):
 
 
 if __name__ == '__main__':
-    q = Question()
-    payload = {'amount': 1}
-    #r = requests.post('https://opentdb.com/api.php', params=payload)
-    #q.fromJson(r.text)
-    fakeM = '{"response_code":0,"results":[{"category":"Entertainment: Music","type":"multiple","difficulty":"medium","question":"Cryoshell, known for &quot;Creeping in My Soul&quot; did the advertising music for what Lego Theme?","correct_answer":"Bionicle","incorrect_answers":["Hero Factory","Ben 10 Alien Force","Star Wars"]}]}'
-    q.fromJson(fakeM)
-    print q
-    print q.checkAnswer("Star wars"), "FALSE"
-    print q.checkAnswer("bionicl"), "TRUE"
-    print q.checkAnswer("1"), q.randomOrder.index(q.answer) == 0
-
-    print "\n====================\n"
-
-    fakeTF = '{"response_code":0,"results":[{"category":"General Knowledge","type":"boolean","difficulty":"easy","question":"The Lego Group was founded in 1932.","correct_answer":"True","incorrect_answers":["False"]}]}'
-    q.fromJson(fakeTF)
-    print q
-    print q.checkAnswer("1"), "TRUE"
-    print q.checkAnswer("vrai"), "TRUE"
-    print q.checkAnswer("sddfi"), "FALSE"
-    print q.checkAnswer("faux"), "FALSE"
+    print "if you wish to test this class please refer to test.py"
