@@ -1,5 +1,4 @@
 import json
-import requests
 import random
 import difflib
 
@@ -9,7 +8,7 @@ class Question(object):
     DIFFICULTIES = ["easy", "medium", "hard", "undefined"]
     TYPES = ["multiple", "boolean", "undefined"]
 
-    def __init__(self):
+    def __init__(self, data=None):
         super(Question, self).__init__()
         self.category = "none"
         self.text = "none"
@@ -19,6 +18,8 @@ class Question(object):
         self.others = []
         self.randomOrder = []
         self.idAnswer = -1
+        if data != None:
+            self.fromJson(data)
 
     def setCategory(self, category):
         self.category = category
@@ -59,8 +60,10 @@ class Question(object):
     # load from JSON data
     def fromJson(self, data):
         try:
-            jdata = json.loads(data)
-            jdata = jdata["results"][0]
+            if type(data) == str:
+                jdata = json.loads(data)
+            else : # already a dict
+                jdata = data
             self.setCategory(jdata["category"])
             self.setQtype(jdata["type"])
             self.setText(jdata["question"])
@@ -69,7 +72,8 @@ class Question(object):
             self.setDifficulty(jdata["difficulty"])
             self.shuffle()
         except Exception as e:
-            print e
+            print "JSON parsing error:", e
+            print type(data)
 
     # create a random array of answers
     def shuffle(self):

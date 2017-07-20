@@ -1,14 +1,36 @@
 import unittest
 from Question import Question
+from QuestionFactory import QuestionFactory
+
+class QuestionFactoryTestCase(unittest.TestCase):
+    def setUp(self):
+        self.qf = QuestionFactory()
+        self.qf.waitCurrentRefill()
+
+    def testAutoRefill(self):
+        self.assertEqual(self.qf.size(), 10, "incorect initial size")
+        for i in range(10):
+            self.qf.pop()
+        q = self.qf.pop()
+        self.assertEqual(self.qf.size(), 0, "should be empty, too fast for refill")
+        self.assertEqual(q, None, "should return None when poping an empty queue")
+        self.qf.waitCurrentRefill()
+        self.assertEqual(self.qf.size(), 10, "incorect refilled size")
+        self.qf.pop()
+        self.assertEqual(self.qf.size(), 9, "incorect refilled size")
+        self.qf.waitCurrentRefill()
+        self.assertEqual(self.qf.size(), 19, "incorect refilled size")
+
+
 
 class QuestionTestCase(unittest.TestCase):
     def setUp(self):
         self.q1 = Question()
-        fakeM = '{"response_code":0,"results":[{"category":"Entertainment: Music","type":"multiple","difficulty":"medium","question":"Cryoshell, known for &quot;Creeping in My Soul&quot; did the advertising music for what Lego Theme?","correct_answer":"Bionicle","incorrect_answers":["Hero Factory","Ben 10 Alien Force","Star Wars"]}]}'
+        fakeM = '{"category":"Entertainment: Music","type":"multiple","difficulty":"medium","question":"Cryoshell, known for &quot;Creeping in My Soul&quot; did the advertising music for what Lego Theme?","correct_answer":"Bionicle","incorrect_answers":["Hero Factory","Ben 10 Alien Force","Star Wars"]}'
         self.q1.fromJson(fakeM)
 
         self.q2 = Question()
-        fakeTF = '{"response_code":0,"results":[{"category":"General Knowledge","type":"boolean","difficulty":"easy","question":"The Lego Group was founded in 1932.","correct_answer":"True","incorrect_answers":["False"]}]}'
+        fakeTF = '{"category":"General Knowledge","type":"boolean","difficulty":"easy","question":"The Lego Group was founded in 1932.","correct_answer":"True","incorrect_answers":["False"]}'
         self.q2.fromJson(fakeTF)
 
     def testTextQuestion(self):
